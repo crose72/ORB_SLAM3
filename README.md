@@ -53,14 +53,22 @@ If you use ORB-SLAM3 in an academic work, please cite:
 # 2. Prerequisites
 We have tested the library in **Ubuntu 16.04** and **18.04**, but it should be easy to compile in other platforms. A powerful computer (e.g. i7) will ensure real-time performance and provide more stable and accurate results.
 
+### ***This branch has updates to make it compatible with **Ubuntu 20.04** and was tested on the Jetson Orin Nano 8gb.
+
 ## C++11 or C++0x Compiler
-We use the new thread and chrono functionalities of C++11.
+We use the new thread and chrono functionalities of C++11.  
+
+### ***This branch has updates to support C++14 and was tested on the Jetson Orin Nano 8gb.
 
 ## Pangolin
 We use [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization and user interface. Dowload and install instructions can be found at: https://github.com/stevenlovegrove/Pangolin.
 
+### ***This branch was tested with a specific commit of the pangolin library found here [Pangolin](https://github.com/crose72/Pangolin.git) and was tested on the Jetson Orin Nano 8gb.  It was compiled from the source.
+
 ## OpenCV
 We use [OpenCV](http://opencv.org) to manipulate images and features. Dowload and install instructions can be found at: http://opencv.org. **Required at leat 3.0. Tested with OpenCV 3.2.0 and 4.4.0**.
+
+### ***Updates to this branch were tested with cuda enabled OpenCV 4.6.0 using a script provided by Q-engineering [OpenCV](https://qengineering.eu/install-opencv-on-orin-nano.html).
 
 ## Eigen3
 Required by g2o (see below). Download and install instructions can be found at: http://eigen.tuxfamily.org. **Required at least 3.1.0**.
@@ -79,11 +87,21 @@ Required to calculate the alignment of the trajectory with the ground truth. **R
 
 We provide some examples to process input of a monocular, monocular-inertial, stereo, stereo-inertial or RGB-D camera using ROS. Building these examples is optional. These have been tested with ROS Melodic under Ubuntu 18.04.
 
+## Additional dependencies
+
+When compiling on the Jetson Nano B01 4GB and Jetson Orin Nano 8GB the following additional libraries were needed for a successful build.
+
+```
+sudo apt-get install libssl-dev
+sudo apt-get install libboost-all-dev
+```
+
 # 3. Building ORB-SLAM3 library and examples
 
 Clone the repository:
 ```
-git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3
+git clone https://github.com/crose72/ORB_SLAM3.git ORB_SLAM3
+git checkout ubuntu-20.04
 ```
 
 We provide a script `build.sh` to build the *Thirdparty* libraries and *ORB-SLAM3*. Please make sure you have installed all required dependencies (see section 2). Execute:
