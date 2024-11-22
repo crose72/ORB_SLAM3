@@ -92,34 +92,66 @@ std::string strToUpper(const std::string& s)
   return ret;
 }
 
-std::string formatString(const char* fmt, ...)
+std::string formatString(const char* fmt, ...) 
 {
-  char* auxPtr = NULL;
-  va_list arg_list;
-  va_start(arg_list, fmt);
-  int numChar = vasprintf(&auxPtr, fmt, arg_list);
-  va_end(arg_list);
-  string retString;
-  if (numChar != -1)
-    retString = auxPtr;
-  else {
-    cerr << __PRETTY_FUNCTION__ << ": Error while allocating memory" << endl;
-  }
-  free(auxPtr);
-  return retString;
+    char* auxPtr = NULL;
+    va_list arg_list;
+    va_start(arg_list, fmt);
+
+    // Calculate the length of the formatted string
+    int numChars = _vscprintf(fmt, arg_list);
+    if (numChars == -1) {
+        va_end(arg_list);
+        return ""; // Return an empty string if there's an error
+    }
+
+    // Allocate memory for the string (+1 for null terminator)
+    auxPtr = (char*)malloc(numChars + 1);
+    if (!auxPtr) {
+        va_end(arg_list);
+        return ""; // Return an empty string if allocation fails
+    }
+
+    // Format the string
+    _vsnprintf_s(auxPtr, numChars + 1, numChars + 1, fmt, arg_list);
+    va_end(arg_list);
+
+    std::string retString(auxPtr);
+    free(auxPtr);
+
+    return retString;
 }
 
-int strPrintf(std::string& str, const char* fmt, ...)
+int strPrintf(std::string& str, const char* fmt, ...) 
 {
-  char* auxPtr = NULL;
-  va_list arg_list;
-  va_start(arg_list, fmt);
-  int numChars = vasprintf(&auxPtr, fmt, arg_list);
-  va_end(arg_list);
-  str = auxPtr;
-  free(auxPtr);
-  return numChars;
+    char* auxPtr = NULL;
+    va_list arg_list;
+    va_start(arg_list, fmt);
+
+    // Calculate the length of the formatted string
+    int numChars = _vscprintf(fmt, arg_list);
+    if (numChars == -1) {
+        va_end(arg_list);
+        return -1; // Return -1 if there's an error
+    }
+
+    // Allocate memory for the string (+1 for null terminator)
+    auxPtr = (char*)malloc(numChars + 1);
+    if (!auxPtr) {
+        va_end(arg_list);
+        return -1; // Return -1 if allocation fails
+    }
+
+    // Format the string
+    _vsnprintf_s(auxPtr, numChars + 1, numChars + 1, fmt, arg_list);
+    va_end(arg_list);
+
+    str = auxPtr;
+    free(auxPtr);
+
+    return numChars;
 }
+
 
 std::string strExpandFilename(const std::string& filename)
 {

@@ -28,7 +28,6 @@ set(SRCS_DUTILS
   DUtils/Random.cpp
   DUtils/Timestamp.cpp)
 
-
 find_package(OpenCV 4 QUIET)
 if(NOT OpenCV_FOUND)
    find_package(OpenCV 3.0 QUIET)
@@ -37,9 +36,15 @@ if(NOT OpenCV_FOUND)
    endif()
 endif()
 
+# Find Boost
+find_package(Boost REQUIRED)
+
+if(NOT Boost_FOUND)
+    message(FATAL_ERROR "Boost not found! Please specify Boost root directory.")
+endif()
+
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 add_library(DBoW2 SHARED ${SRCS_DBOW2} ${SRCS_DUTILS})
-target_link_libraries(DBoW2 ${OpenCV_LIBS})
-
+target_link_libraries(DBoW2 ${OpenCV_LIBS} ${Boost_LIBRARIES})
